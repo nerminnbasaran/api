@@ -42,7 +42,7 @@ public class Homework_6 extends ReqresBaseUrl {
         //Do assertion
         // 1)Status code is 200
        response.then().assertThat().statusCode(200);
-        //assertEquals(200,response.statusCode());
+       assertEquals(200,response.statusCode());
         //2)Print all pantone_values
         JsonPath jsonPath = response.jsonPath();
         List<String> pantoneValues = jsonPath.getList("data.pantone_value");
