@@ -1,10 +1,15 @@
 package get_requests;
 
 import base_urls.JSonPlaceHolderBaseUrl;
+import io.restassured.response.Response;
 import org.junit.Test;
 import test_data.JSonPlaceHolderTestData;
 
+import java.util.HashMap;
 import java.util.Map;
+
+import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertEquals;
 
 public class Get09 extends JSonPlaceHolderBaseUrl {
      /*
@@ -35,7 +40,25 @@ public class Get09 extends JSonPlaceHolderBaseUrl {
 
         //Set the expected data
         Map<String,Object> expectedData = new JSonPlaceHolderTestData().expectedDataMapMethod(1,"quis ut nam facilis et officia qui",false);
+        expectedData.put("Via","1.1 vegur");
+        expectedData.put("Server","cloudflare");
         System.out.println("expectedData = " + expectedData);
+
+        //Send the request and get the response
+        Response response =given(spec).get("{first}/{second}");
+        response.prettyPrint();
+
+        //Do Assertion
+        Map<String,Object> actualData =response.as(HashMap.class);//De-Serialization
+        System.out.println("actualData = " + actualData);
+
+        assertEquals(200,response.statusCode());
+        assertEquals(expectedData.get("userId"),actualData.get("userId"));
+        assertEquals(expectedData.get("title"),actualData.get("title"));
+        assertEquals(expectedData.get("completed"),actualData.get("completed"));
+
+        assertEquals(expectedData.get("Via"),response.header("Via"));
+        assertEquals(expectedData.get("Server"),response.header("Server"));
 
 
     }
