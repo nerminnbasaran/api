@@ -3,6 +3,7 @@ package get_requests;
 import base_urls.HerOkuAppBaseUrl;
 import io.restassured.response.Response;
 import org.junit.Test;
+import test_data.HerOkuAppTestData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class Get10 extends HerOkuAppBaseUrl {
     public void get10(){
 
         //Set the URL
-        spec.pathParams("first","booking","second",56);
+        spec.pathParams("first","booking","second",3331);
 
         //Set the expected data
         Map<String,String> bookingdatesMap = new HashMap<>();
@@ -69,5 +70,34 @@ public class Get10 extends HerOkuAppBaseUrl {
         assertEquals(((Map)expectedData.get("bookingdates")).get("checkin"),((Map)actualData.get("bookingdates")).get("checkin"));
         assertEquals(((Map)expectedData.get("bookingdates")).get("checkout"),((Map)actualData.get("bookingdates")).get("checkout"));
         assertEquals(expectedData.get("additionalneeds"),actualData.get("additionalneeds"));
+    }
+
+    @Test //Recommended way
+    public void get10b(){
+        //Set the URL
+        spec.pathParams("first","booking","second",3331);
+
+        //Set the expected data
+        Map<String,String> bookingdatesMap = new HerOkuAppTestData().bookingdatesMapMethod("2018-01-01","2019-01-01");
+        Map<String,Object> expectedData = new HerOkuAppTestData().expectedDataMethod("Jane","Doe",111,true,bookingdatesMap,"Extra pillow please");
+
+        System.out.println("expectedData = " + expectedData);
+
+        //Send the request and get the response
+        Response response =given(spec).get("{first}/{second}");
+        response.prettyPrint();
+
+        //Do Assertion
+        Map<String,Object> actualData = response.as(HashMap.class);
+        System.out.println("actualData = " + actualData);
+
+        assertEquals(expectedData.get("firstname"),actualData.get("firstname"));
+        assertEquals(expectedData.get("lastname"),actualData.get("lastname"));
+        assertEquals(expectedData.get("totalprice"),actualData.get("totalprice"));
+        assertEquals(expectedData.get("depositpaid"),actualData.get("depositpaid"));
+        assertEquals(bookingdatesMap.get("checkin"),actualData.get(((Map)actualData.get("bookingdates")).get("checkin")));
+        assertEquals(bookingdatesMap.get("checkout"),actualData.get(((Map)actualData.get("bookingdates")).get("checkout")));
+        assertEquals(expectedData.get("additionalneeds"),actualData.get("additionalneeds"));
+
     }
 }
