@@ -54,9 +54,11 @@ public class Homework_6 extends ReqresBaseUrl {
 
         //Assert that there are 3 ids greater than 3
         assertEquals(3,idList.size());
+
         //4)Print all names whose ids are less than 3 on the console
         List<String> namesList = jsonPath.getList("data.findAll{it.id<3}.name");
         System.out.println("namesList = " + namesList);
+
         //Assert that the number of names whose ids are less than 3 is 2
         assertEquals(2,namesList.size());
     }
