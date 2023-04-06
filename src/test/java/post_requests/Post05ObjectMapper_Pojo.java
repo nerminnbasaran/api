@@ -4,18 +4,16 @@ import base_urls.JSonPlaceHolderBaseUrl;
 import io.restassured.response.Response;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
-import test_data.JSonPlaceHolderTestData;
+import pojos.JsonPlaceHolderPojo;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
 
-public class Post05ObjectMapper_Map extends JSonPlaceHolderBaseUrl {
+public class Post05ObjectMapper_Pojo extends JSonPlaceHolderBaseUrl {
      /*
-    Given
+   Given
       1) https://jsonplaceholder.typicode.com/todos
       2) {
             "userId": 55,
@@ -42,24 +40,23 @@ public class Post05ObjectMapper_Map extends JSonPlaceHolderBaseUrl {
         spec.pathParam("first","todos");
 
         //Set the expected data
-        Map<String,Object> expectedData = new JSonPlaceHolderTestData().expectedDataMapMethod(55,"Tidy your room",false);
+        JsonPlaceHolderPojo expectedData = new JsonPlaceHolderPojo(55,"Tidy your room",false);
         System.out.println("expectedData = " + expectedData);
 
         //Send the request and get the response
-        Response response = given(spec).body(expectedData).post("{first}");
+        Response response =given(spec).body(expectedData).post("{first}");
         response.prettyPrint();
 
         //Do Assertion
-        Map<String,Object> actualData = new ObjectMapper().readValue(response.asString(), HashMap.class);
+        JsonPlaceHolderPojo actualData = new ObjectMapper().readValue(response.asString(), JsonPlaceHolderPojo.class);
         System.out.println("actualData = " + actualData);
 
         assertEquals(201,response.getStatusCode());
-        assertEquals(expectedData.get("completed"),actualData.get("completed"));
-        assertEquals(expectedData.get("title"),actualData.get("title"));
-        assertEquals(expectedData.get("userId"),actualData.get("userId"));
+        assertEquals(expectedData.getCompleted(),actualData.getCompleted());
+        assertEquals(expectedData.getTitle(),actualData.getTitle());
+        assertEquals(expectedData.getUserId(),actualData.getUserId());
+
+
+
     }
-
-
-
-
 }
