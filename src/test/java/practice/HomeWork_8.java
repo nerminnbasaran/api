@@ -4,7 +4,6 @@ import base_urls.PetStoreBaseUrl;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.Test;
-import pojos.PetStorePojo;
 import test_data.PetStoreTestData;
 
 import java.util.HashMap;
@@ -65,28 +64,7 @@ public class HomeWork_8 extends PetStoreBaseUrl {
 
 
     }
-    @Test
-    public void h8b(){
-        //Set the URL
-        spec.pathParams("first","v2","second","user");
-
-        //Set the expected data
-        PetStorePojo expectedData =new PetStorePojo("JohnDoe","JohnDoe","Doe","john@doe.com","1234","1234",123);
-        System.out.println("expectedData = " + expectedData);
-
-        //Send the request and get the response
-        Response response =given(spec).body(expectedData).post("{first}/{second}");
-        response.prettyPrint();
-
-        PetStorePojo actualData =response.as(PetStorePojo.class);
-        System.out.println("actualData = " + actualData);
-
-        //Do Assertion
-        //assertEquals(200,response.statusCode());
-        //assertEquals("6874988058",actualData.);
-
-
 
 
     }
-}
+
