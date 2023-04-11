@@ -51,12 +51,14 @@ public class S1_Post extends HerOkuAppBaseUrl {
 
      */
 
-    @Test
-    public void post(){
-        spec.pathParam("first","booking");
+    public static int bookingId;//We put the created bookingId into a container and use it in other classes.
 
-        BookingDatesPojo bookingDatesPojo = new BookingDatesPojo("2018-01-01","2019-01-01");
-        BookingPojo expectedData = new BookingPojo("Jim","Brown",111,true,bookingDatesPojo,"Breakfast");
+    @Test
+    public void post() {
+        spec.pathParam("first", "booking");
+
+        BookingDatesPojo bookingDatesPojo = new BookingDatesPojo("2018-01-01", "2019-01-01");
+        BookingPojo expectedData = new BookingPojo("Jim", "Brown", 111, true, bookingDatesPojo, "Breakfast");
         System.out.println("expectedData = " + expectedData);
 
         Response response = given(spec).body(expectedData).post("{first}");
@@ -66,18 +68,21 @@ public class S1_Post extends HerOkuAppBaseUrl {
         //With convertJsonToJavaObject() method we handled throw exception issue
         System.out.println("actualData = " + actualData);
 
-        assertEquals(200,response.getStatusCode());
-        assertEquals(expectedData.getFirstname(),actualData.getBooking().getFirstname());
-        assertEquals(expectedData.getLastname(),actualData.getBooking().getLastname());
-        assertEquals(expectedData.getTotalprice(),actualData.getBooking().getTotalprice());
-        assertEquals(expectedData.getDepositpaid(),actualData.getBooking().getDepositpaid());
+        assertEquals(200, response.getStatusCode());
+        assertEquals(expectedData.getFirstname(), actualData.getBooking().getFirstname());
+        assertEquals(expectedData.getLastname(), actualData.getBooking().getLastname());
+        assertEquals(expectedData.getTotalprice(), actualData.getBooking().getTotalprice());
+        assertEquals(expectedData.getDepositpaid(), actualData.getBooking().getDepositpaid());
 
-        assertEquals(bookingDatesPojo.getCheckin(),actualData.getBooking().getBookingdates().getCheckin());
-        assertEquals(bookingDatesPojo.getCheckout(),actualData.getBooking().getBookingdates().getCheckout());
+        assertEquals(bookingDatesPojo.getCheckin(), actualData.getBooking().getBookingdates().getCheckin());
+        assertEquals(bookingDatesPojo.getCheckout(), actualData.getBooking().getBookingdates().getCheckout());
 
-        assertEquals(expectedData.getAdditionalneeds(),actualData.getBooking().getAdditionalneeds());
+        assertEquals(expectedData.getAdditionalneeds(), actualData.getBooking().getAdditionalneeds());
+
+        bookingId = actualData.getBookingid();
 
 
 
 
     }
+}
