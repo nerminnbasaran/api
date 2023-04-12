@@ -54,7 +54,7 @@ public class S1_Post extends HerOkuAppBaseUrl {
     public static int bookingId;//We put the created bookingId into a container and use it in other classes.
 
     @Test
-    public void post() {
+    public void postTest() {
         spec.pathParam("first", "booking");
 
         BookingDatesPojo bookingDatesPojo = new BookingDatesPojo("2018-01-01", "2019-01-01");
