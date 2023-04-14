@@ -6,10 +6,13 @@ import org.junit.Test;
 import pojos.Country;
 import pojos.Customer;
 import pojos.User;
+import utils.ObjectMapperUtils;
 
 import java.util.ArrayList;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertEquals;
+import static utils.AuthenticationGmiBank.gmiBankToken;
 
 public class GetCustomer extends GmiBankBaseUrl {
     /*
@@ -69,11 +72,46 @@ public class GetCustomer extends GmiBankBaseUrl {
 
         //Send the request and get the response
         Response response = given(spec).
-                headers("Authorization","Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYXJrX3R3YWluIiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9NQU5BR0VSIiwiZXhwIjoxNjgxNDgwOTI4fQ.4KFHRlqnjJDCXDC0BJAxKQV87kTmfGTDYpgcDU1IObPgBkqQsLsnFDz8gp5V_ENCoonQKk-UdIXoNHzpFD0Lpw").
+                headers("Authorization", "Bearer " + gmiBankToken()).
                 get("{first}/{second}/{third}");
-        response.prettyPrint();
 
-        //
+
+        Customer actualData = ObjectMapperUtils.convertJsonToJavaObject(response.asString(), Customer.class);
+        System.out.println("actualData = " + actualData);
+
+        //Do Assertion
+
+        assertEquals(200,response.statusCode());
+
+        assertEquals(expectedData.getId(),actualData.getId());
+        assertEquals(expectedData.getFirstName(),actualData.getFirstName());
+        assertEquals(expectedData.getLastName(), actualData.getLastName());
+        assertEquals(expectedData.getMiddleInitial(), actualData.getMiddleInitial());
+        assertEquals(expectedData.getEmail(), actualData.getEmail());
+        assertEquals(expectedData.getPhoneNumber(), actualData.getPhoneNumber());
+        assertEquals(expectedData.getZipCode(), actualData.getZipCode());
+        assertEquals(expectedData.getAddress(), actualData.getAddress());
+        assertEquals(expectedData.getSsn(), actualData.getSsn());
+        assertEquals(expectedData.getCreateDate(), actualData.getCreateDate());
+        assertEquals(expectedData.isZelleEnrolled(), actualData.isZelleEnrolled());
+
+        assertEquals(expectedData.getCountry().getName(), actualData.getCountry().getName());
+        assertEquals(expectedData.getCountry().getId(), actualData.getCountry().getId());
+        assertEquals(expectedData.getCountry().getStates(), actualData.getCountry().getStates());
+
+        assertEquals(expectedData.getState(), actualData.getState());
+
+        assertEquals(expectedData.getUser().getId(), actualData.getUser().getId());
+        assertEquals(expectedData.getUser().getLogin(), actualData.getUser().getLogin());
+        assertEquals(expectedData.getUser().getFirstName(), actualData.getUser().getFirstName());
+        assertEquals(expectedData.getUser().getLastName(), actualData.getUser().getLastName());
+        assertEquals(expectedData.getUser().getEmail(), actualData.getUser().getEmail());
+        assertEquals(expectedData.getUser().isActivated(), actualData.getUser().isActivated());
+        assertEquals(expectedData.getUser().getLangKey(), actualData.getUser().getLangKey());
+        assertEquals(expectedData.getUser().getImageUrl(), actualData.getUser().getImageUrl());
+        assertEquals(expectedData.getUser().getResetDate(), actualData.getUser().getResetDate());
+
+        assertEquals(expectedData.getAccounts(), actualData.getAccounts());
 
     }
 
